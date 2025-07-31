@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Criadores & Jogos - Enciclopédia Completa</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* Reset básico */
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin:0; padding:0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height:1.5;
+    min-height:100vh;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  :root {
+    --bg: #f5f7fa;
+    --text: #212121;
+    --primary: #1e88e5;
+    --card-bg: #fff;
+    --shadow: rgba(0,0,0,0.1);
+  }
+  body.dark {
+    --bg: #121212;
+    --text: #e0e0e0;
+    --primary: #90caf9;
+    --card-bg: #1e1e1e;
+    --shadow: rgba(0,0,0,0.7);
+  }
+  header {
+    position: sticky;
+    top:0; left:0; right:0;
+    background: var(--card-bg);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px var(--shadow);
+    z-index: 1000;
+  }
+  header h1 {
+    margin: 0;
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 1.8rem;
+  }
+  .search-container {
+    flex: 1;
+    margin-left: 24px;
+    max-width: 480px;
+  }
+  input#search {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+  }
+  input#search:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 8px var(--primary);
+  }
+  button#toggle-theme {
+    background-color: var(--primary);
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    user-select: none;
+  }
+  button#toggle-theme:hover,
+  button#toggle-theme:focus {
+    background-color: #1565c0;
+    outline: none;
+  }
+  main {
+    max-width: 1300px;
+    margin: 40px auto 80px;
+    padding: 0 24px;
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+  }
+  label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--primary);
+  }
+  select {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
+    gap: 32px;
+  }
+  .card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: 0 6px 15px var(--shadow);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .card:hover, .card:focus-within {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px var(--primary);
+  }
+  .card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  }
+  .card-content {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-content h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--primary);
+  }
+  .card-content h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #444;
+  }
+  .card-content p {
+    flex-grow: 1;
+    font-size: 0.95rem;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .tag {
+    background-color: var(--primary);
+    color: white;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 5px 14px;
+    border-radius: 100px;
+    user-select: none;
+    transition: background-color 0.3s ease;
+  }
+  .tag:hover {
+    background-color: #1565c0;
+  }
+  .extra-info {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: auto;
+  }
+  .extra-info a {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .extra-info a:hover {
+    text-decoration: underline;
+  }
+  footer {
+    text-align: center;
+    color: var(--primary);
+    font-weight: 600;
+    padding: 24px;
+    user-select: none;
+  }
+  @media (max-width: 640px) {
+    header {
+      flex-direction: column;
+      gap: 12px;
+    }
+    .search-container {
+      margin-left: 0;
+      max-width: 100%;
+    }
+    .filters {
+      flex-direction: column;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Criadores & Jogos</h1>
+  <div class="search-container">
+    <input id="search" type="search" placeholder="Buscar jogo ou criador..." aria-label="Buscar jogo ou criador" />
+  </div>
+  <button id="toggle-theme" aria-label="Alternar tema claro e escuro">Modo Escuro</button>
+</header>
+
+<main>
+  <div class="filters">
+    <div class="filter-group">
+      <label for="filter-genre">Gênero</label>
+      <select id="filter-genre">
+        <option value="">Todos</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="filter-platform">Plataforma</label>
+      <select id="filter-platform">
+        <option value="">Todas</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="filter-year">Ano</label>
+      <select id="filter-year">
+        <option value="">Todos</option>
+      </select>
+    </div>
+  </div>
+
+  <section class="grid" id="card-lista">
+    <!-- Cards aqui -->
+  </section>
+</main>
+
+<footer>
+  © 2025 Criadores & Jogos - Todos os direitos reservados
+</footer>
+
+<script>
+  // Dados - só uma amostra, você expande pra +100
+  const dados = [
+    {
+      criadores: ["Hideo Kojima"],
+      jogo: "Death Stranding",
+      descricao: "Death Stranding é um jogo de ação e aventura focado em exploração e conexão entre jogadores. Lançado em 2019, é famoso pela narrativa única e visuais impressionantes.",
+      genero: ["Ação", "Aventura"],
+      plataformas: ["PS4", "PC"],
+      ano: 2019,
+      nota: 8.9,
+      imagem: "https://upload.wikimedia.org/wikipedia/en/6/6e/Death_Stranding_cover.jpg",
+      link: "https://www.playstation.com/pt-br/games/death-stranding/"
+    },
+    {
+      criadores: ["Shigeru Miyamoto"],
+      jogo: "The Legend of Zelda: Breath of the Wild",
+      descricao: "Este título revolucionou jogos de mundo aberto com liberdade sem precedentes e design de níveis inovador. Lançado em 2017, recebeu aclamação universal.",
+      genero: ["Aventura", "RPG"],
+      plataformas: ["Switch", "Wii U"],
+      ano: 2017,
+      nota: 9.8,
+      imagem: "https://upload.wikimedia.org/wikipedia/en/0/0b/The_Legend_of_Zelda_Breath_of_the_Wild.jpg",
+      link: "https://www.zelda.com/breath-of-the-wild/"
+    },
+    {
+      criadores: ["Gabe Newell"],
+      jogo: "Half-Life 2",
+      descricao: "FPS clássico que revolucionou a narrativa e física em jogos. Lançado em 2004, é uma das obras mais importantes da Valve.",
+      genero: ["FPS", "Ação"],
+      plataformas: ["PC", "Xbox"],
+      ano: 2004,
+      nota: 9.5,
+      imagem: "https://upload.wikimedia.org/wikipedia/en/2/29/Half-Life_2_cover.jpg",
+      link: "https://store.steampowered.com/app/220/HalfLife_2/"
+    },
+    
+  {
+    criadores: ["Hideo Kojima"],
+    jogo: "Death Stranding",
+    descricao: "Jogo de ação e aventura focado em exploração e conexão social, lançado em 2019, conhecido por sua narrativa profunda e visual cinematográfico.",
+    genero: ["Ação", "Aventura"],
+    plataformas: ["PS4", "PC"],
+    ano: 2019,
+    nota: 8.9,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/6/6e/Death_Stranding_cover.jpg",
+    link: "https://www.playstation.com/pt-br/games/death-stranding/"
+  },
+  {
+    criadores: ["Shigeru Miyamoto"],
+    jogo: "The Legend of Zelda: Breath of the Wild",
+    descricao: "Jogo revolucionário de mundo aberto com liberdade de exploração e design inovador, lançado em 2017, muito aclamado pela crítica.",
+    genero: ["Aventura", "RPG"],
+    plataformas: ["Switch", "Wii U"],
+    ano: 2017,
+    nota: 9.8,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/0/0b/The_Legend_of_Zelda_Breath_of_the_Wild.jpg",
+    link: "https://www.zelda.com/breath-of-the-wild/"
+  },
+  {
+    criadores: ["Gabe Newell"],
+    jogo: "Half-Life 2",
+    descricao: "FPS clássico que revolucionou narrativa e física em jogos, lançado em 2004, muito influente até hoje.",
+    genero: ["FPS", "Ação"],
+    plataformas: ["PC", "Xbox"],
+    ano: 2004,
+    nota: 9.5,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/2/29/Half-Life_2_cover.jpg",
+    link: "https://store.steampowered.com/app/220/HalfLife_2/"
+  },
+  {
+    criadores: ["Ken Levine"],
+    jogo: "BioShock",
+    descricao: "FPS com uma história profunda e ambientação única na cidade submersa de Rapture, lançado em 2007.",
+    genero: ["FPS", "Terror"],
+    plataformas: ["PC", "Xbox", "PS3"],
+    ano: 2007,
+    nota: 9.0,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/a/a6/Bioshock_cover.png",
+    link: "https://bioshock.com/"
+  },
+  {
+    criadores: ["Todd Howard"],
+    jogo: "The Elder Scrolls V: Skyrim",
+    descricao: "RPG de mundo aberto épico, lançado em 2011, famoso por sua imensa liberdade e modding ativo.",
+    genero: ["RPG", "Aventura"],
+    plataformas: ["PC", "Xbox", "PS3", "Switch"],
+    ano: 2011,
+    nota: 9.6,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/5/55/Skyrim_cover.png",
+    link: "https://elderscrolls.bethesda.net/en/skyrim"
+  },
+  {
+    criadores: ["Markus Persson"],
+    jogo: "Minecraft",
+    descricao: "Sandbox de construção e sobrevivência, lançado em 2011, um dos jogos mais vendidos e influentes da história.",
+    genero: ["Sandbox", "Sobrevivência"],
+    plataformas: ["PC", "Xbox", "PS4", "Switch", "Mobile"],
+    ano: 2011,
+    nota: 9.4,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/5/51/Minecraft_cover.png",
+    link: "https://www.minecraft.net/"
+  },
+  {
+    criadores: ["Hidetaka Miyazaki"],
+    jogo: "Dark Souls",
+    descricao: "RPG de ação conhecido por sua dificuldade desafiadora e mundo interconectado, lançado em 2011.",
+    genero: ["RPG", "Ação"],
+    plataformas: ["PC", "Xbox", "PS3", "PS4"],
+    ano: 2011,
+    nota: 9.2,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/5/5e/Dark_Souls_Cover_Art.jpg",
+    link: "https://www.bandainamcoent.com/games/dark-souls"
+  },
+  {
+    criadores: ["Sid Meier"],
+    jogo: "Civilization VI",
+    descricao: "Jogo de estratégia por turnos focado em construir uma civilização e competir com outras, lançado em 2016.",
+    genero: ["Estratégia", "Turn-based"],
+    plataformas: ["PC", "Switch", "Mobile"],
+    ano: 2016,
+    nota: 8.7,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/6/6d/Civ6_cover.jpg",
+    link: "https://civilization.com/civilization-vi/"
+  },
+  {
+    criadores: ["Will Wright"],
+    jogo: "The Sims 4",
+    descricao: "Simulador social onde jogadores criam e controlam pessoas virtuais, lançado em 2014.",
+    genero: ["Simulação", "Vida"],
+    plataformas: ["PC", "Mac"],
+    ano: 2014,
+    nota: 8.0,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/8/8a/The_Sims_4_cover_art.jpg",
+    link: "https://www.ea.com/games/the-sims/the-sims-4"
+  },
+  {
+    criadores: ["Cliff Bleszinski"],
+    jogo: "Gears of War",
+    descricao: "FPS em terceira pessoa focado em combate tático, lançado em 2006.",
+    genero: ["FPS", "Ação"],
+    plataformas: ["Xbox", "PC"],
+    ano: 2006,
+    nota: 8.5,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/5/5e/Gears_of_War_box_artwork.jpg",
+    link: "https://gearsofwar.com/"
+  },
+  {
+    criadores: ["Yu Suzuki"],
+    jogo: "Shenmue",
+    descricao: "Aventura em mundo aberto com narrativa forte, lançado em 1999.",
+    genero: ["Aventura", "RPG"],
+    plataformas: ["Dreamcast", "Xbox One"],
+    ano: 1999,
+    nota: 8.3,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/1/11/Shenmue_Box_Art.jpg",
+    link: "https://en.wikipedia.org/wiki/Shenmue"
+  },
+  {
+    criadores: ["Garry Newman"],
+    jogo: "Garry's Mod",
+    descricao: "Sandbox baseado no motor Source, permitindo criação livre, lançado em 2006.",
+    genero: ["Sandbox", "Multijogador"],
+    plataformas: ["PC"],
+    ano: 2006,
+    nota: 8.2,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/5/5c/Garrysmod_cover.jpg",
+    link: "https://gmod.facepunch.com/"
+  },
+  {
+    criadores: ["Cory Barlog"],
+    jogo: "God of War (2018)",
+    descricao: "Reinvenção da série God of War, com foco em narrativa e combate visceral, lançado em 2018.",
+    genero: ["Ação", "Aventura"],
+    plataformas: ["PS4"],
+    ano: 2018,
+    nota: 9.7,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/a/a7/God_of_War_4_cover.jpg",
+    link: "https://godofwar.playstation.com/"
+  },
+  {
+    criadores: ["Jenova Chen"],
+    jogo: "Journey",
+    descricao: "Jogo artístico de aventura com ênfase em emoção e exploração, lançado em 2012.",
+    genero: ["Aventura", "Arte"],
+    plataformas: ["PS3", "PS4", "PC"],
+    ano: 2012,
+    nota: 9.1,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/7/7d/Journey_cover_artwork.jpg",
+    link: "https://thatgamecompany.com/journey/"
+  },
+  {
+    criadores: ["John Carmack", "John Romero"],
+    jogo: "Doom (1993)",
+    descricao: "FPS revolucionário que definiu o gênero, lançado em 1993.",
+    genero: ["FPS", "Ação"],
+    plataformas: ["PC"],
+    ano: 1993,
+    nota: 9.4,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/5/57/Doom_cover_artwork.jpg",
+    link: "https://bethesda.net/en/game/doom"
+  },
+  {
+    criadores: ["Keiji Inafune"],
+    jogo: "Mega Man",
+    descricao: "Clássico jogo de plataforma com ação rápida e chefes memoráveis, lançado em 1987.",
+    genero: ["Plataforma", "Ação"],
+    plataformas: ["NES", "Várias"],
+    ano: 1987,
+    nota: 8.8,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/f/fb/Mega_Man_NES_box_art.jpg",
+    link: "https://megaman.capcom.com/"
+  },
+  {
+    criadores: ["Mark Cerny"],
+    jogo: "Astro's Playroom",
+    descricao: "Jogo de plataforma e demonstração técnica para o PS5, lançado em 2020.",
+    genero: ["Plataforma", "Aventura"],
+    plataformas: ["PS5"],
+    ano: 2020,
+    nota: 8.5,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/7/7c/Astro%27s_Playroom_cover_art.jpg",
+    link: "https://www.playstation.com/en-us/games/astros-playroom/"
+  },
+  {
+    criadores: ["Koji Igarashi"],
+    jogo: "Castlevania: Symphony of the Night",
+    descricao: "Jogo de ação e aventura que definiu o gênero Metroidvania, lançado em 1997.",
+    genero: ["Ação", "Metroidvania"],
+    plataformas: ["PlayStation", "Xbox One", "PS4"],
+    ano: 1997,
+    nota: 9.3,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/f/f3/Castlevania_Symphony_of_the_Night_Boxart.jpg",
+    link: "https://www.konami.com/games/castlevania/"
+  },
+  {
+    criadores: ["Hidetaka Miyazaki"],
+    jogo: "Elden Ring",
+    descricao: "RPG de ação em mundo aberto com narrativa complexa, lançado em 2022, grande sucesso mundial.",
+    genero: ["RPG", "Ação"],
+    plataformas: ["PC", "PS4", "PS5", "Xbox"],
+    ano: 2022,
+    nota: 9.6,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/7/7a/Elden_Ring_cover.jpg",
+    link: "https://en.bandainamcoent.eu/elden-ring/elden-ring"
+  },
+  {
+    criadores: ["Masahiro Sakurai"],
+    jogo: "Super Smash Bros. Ultimate",
+    descricao: "Jogo de luta que reúne personagens de vários universos Nintendo, lançado em 2018.",
+    genero: ["Luta"],
+    plataformas: ["Switch"],
+    ano: 2018,
+    nota: 9.5,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/0/0b/Super_Smash_Bros._Ultimate.jpg",
+    link: "https://www.smashbros.com/en_US/"
+  },
+  {
+    criadores: ["Jade Raymond"],
+    jogo: "Assassin's Creed",
+    descricao: "Jogo de ação e aventura focado em história e parkour, lançado em 2007, deu início a uma das franquias mais populares.",
+    genero: ["Ação", "Aventura"],
+    plataformas: ["PC", "Xbox", "PS3"],
+    ano: 2007,
+    nota: 8.6,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/5/52/Assassin%27s_Creed_cover.jpg",
+    link: "https://www.ubisoft.com/game/assassins-creed"
+  },
+  {
+    criadores: ["Hironobu Sakaguchi"],
+    jogo: "Final Fantasy VII",
+    descricao: "RPG clássico que marcou a indústria com sua história e gráficos, lançado em 1997.",
+    genero: ["RPG"],
+    plataformas: ["PlayStation", "PC"],
+    ano: 1997,
+    nota: 9.7,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/0/0e/Final_Fantasy_VII_Box_Art.jpg",
+    link: "https://finalfantasyvii.square-enix-games.com/"
+  },
+  {
+    criadores: ["Jade Raymond"],
+    jogo: "Watch Dogs",
+    descricao: "Jogo de ação em mundo aberto focado em hacking, lançado em 2014.",
+    genero: ["Ação", "Mundo Aberto"],
+    plataformas: ["PC", "Xbox", "PS4"],
+    ano: 2014,
+    nota: 7.5,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/6/69/Watch_Dogs_Box_Art.jpg",
+    link: "https://watchdogs.ubisoft.com/"
+  },
+  {
+    criadores: ["Jonathan Blow"],
+    jogo: "Braid",
+    descricao: "Jogo indie de plataforma e quebra-cabeça com manipulação do tempo, lançado em 2008.",
+    genero: ["Plataforma", "Quebra-cabeça"],
+    plataformas: ["PC", "Xbox 360"],
+    ano: 2008,
+    nota: 9.0,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/1/12/Braid_cover_art.jpg",
+    link: "https://jonathanblow.com/braid"
+  },
+  {
+    criadores: ["Ed Boon", "John Tobias"],
+    jogo: "Mortal Kombat",
+    descricao: "Jogo de luta famoso por sua violência e personagens icônicos, lançado em 1992.",
+    genero: ["Luta"],
+    plataformas: ["Arcade", "PC", "Console"],
+    ano: 1992,
+    nota: 8.8,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/5/56/Mortal_Kombat_Arcade_Cover.jpg",
+    link: "https://www.mortalkombat.com/"
+  },
+  {
+    criadores: ["Toby Fox"],
+    jogo: "Undertale",
+    descricao: "RPG indie com narrativa inovadora e sistema de combate único, lançado em 2015.",
+    genero: ["RPG"],
+    plataformas: ["PC", "Switch", "PS4", "PS5"],
+    ano: 2015,
+    nota: 9.3,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/6/6a/Undertale_cover_art.jpg",
+    link: "https://undertale.com/"
+  },
+  {
+    criadores: ["Hidetaka Miyazaki"],
+    jogo: "Bloodborne",
+    descricao: "RPG de ação com atmosfera sombria e combate desafiador, lançado em 2015 para PS4.",
+    genero: ["RPG", "Ação"],
+    plataformas: ["PS4"],
+    ano: 2015,
+    nota: 9.4,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/5/5e/Bloodborne_Cover_Art.jpg",
+    link: "https://www.playstation.com/en-us/games/bloodborne-ps4/"
+  },
+  {
+    criadores: ["Sid Meier"],
+    jogo: "Civilization V",
+    descricao: "Jogo de estratégia por turnos focado em construir impérios, lançado em 2010.",
+    genero: ["Estratégia", "Turn-based"],
+    plataformas: ["PC", "Mac"],
+    ano: 2010,
+    nota: 9.0,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/f/f5/Civilization_5_box_artwork.jpg",
+    link: "https://civilization.com/civilization-5/"
+  },
+  {
+    criadores: ["Hidetaka Miyazaki"],
+    jogo: "Sekiro: Shadows Die Twice",
+    descricao: "RPG de ação com foco em combate preciso e furtividade, lançado em 2019.",
+    genero: ["Ação", "RPG"],
+    plataformas: ["PC", "PS4", "Xbox One"],
+    ano: 2019,
+    nota: 9.1,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/9/9f/Sekiro_Box_Art.jpg",
+    link: "https://en.bandainamcoent.eu/sekiro/shadows-die-twice"
+  },
+  {
+    criadores: ["Sam Houser"],
+    jogo: "Grand Theft Auto V",
+    descricao: "Jogo de ação em mundo aberto com história entrelaçada e multiplayer massivo, lançado em 2013.",
+    genero: ["Ação", "Mundo Aberto"],
+    plataformas: ["PC", "Xbox", "PS3", "PS4", "PS5", "Xbox One", "Xbox Series X/S"],
+    ano: 2013,
+    nota: 9.7,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/a/a5/Grand_Theft_Auto_V.png",
+    link: "https://www.rockstargames.com/V/"
+  },
+  {
+    criadores: ["Koji Igarashi"],
+    jogo: "Bloodstained: Ritual of the Night",
+    descricao: "Jogo de ação estilo metroidvania criado pelo produtor de Castlevania, lançado em 2019.",
+    genero: ["Ação", "Metroidvania"],
+    plataformas: ["PC", "PS4", "Xbox One", "Switch"],
+    ano: 2019,
+    nota: 8.4,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/1/11/Bloodstained_Ritual_of_the_Night_cover_art.jpg",
+    link: "https://www.bloodstained.net/"
+  },
+  {
+    criadores: ["Hideo Kojima"],
+    jogo: "Metal Gear Solid V: The Phantom Pain",
+    descricao: "Jogo de ação furtiva com mundo aberto e narrativa complexa, lançado em 2015.",
+    genero: ["Ação", "Stealth"],
+    plataformas: ["PC", "PS4", "Xbox One"],
+    ano: 2015,
+    nota: 9.3,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/f/fc/Metal_Gear_Solid_V_The_Phantom_Pain_cover.png",
+    link: "https://www.konami.com/mg/mgs5/"
+  },
+  {
+    criadores: ["Cliff Bleszinski"],
+    jogo: "Bulletstorm",
+    descricao: "FPS com foco em combates criativos e movimentos dinâmicos, lançado em 2011.",
+    genero: ["FPS", "Ação"],
+    plataformas: ["PC", "Xbox 360", "PS3"],
+    ano: 2011,
+    nota: 7.8,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/f/f3/Bulletstorm_cover_art.jpg",
+    link: "https://www.epicgames.com/store/en-US/p/bulletstorm"
+  },
+  {
+    criadores: ["Peter Molyneux"],
+    jogo: "Fable",
+    descricao: "RPG com escolhas morais e mundo interativo, lançado em 2004.",
+    genero: ["RPG", "Aventura"],
+    plataformas: ["Xbox", "PC"],
+    ano: 2004,
+    nota: 8.3,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/4/49/Fable_cover.jpg",
+    link: "https://www.fable.com/"
+  },
+  {
+    criadores: ["Kojima Productions"],
+    jogo: "P.T. (Playable Teaser)",
+    descricao: "Demo jogável de horror psicológico para o cancelado Silent Hills, lançado em 2014.",
+    genero: ["Horror", "Suspense"],
+    plataformas: ["PS4"],
+    ano: 2014,
+    nota: 9.1,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/0/02/P.T._playable_teaser_box_artwork.jpg",
+    link: "https://en.wikipedia.org/wiki/P.T._(video_game)"
+  },
+  {
+    criadores: ["Mojang Studios"],
+    jogo: "Minecraft Dungeons",
+    descricao: "Jogo de ação-RPG com visão isométrica ambientado no universo Minecraft, lançado em 2020.",
+    genero: ["Ação", "RPG"],
+    plataformas: ["PC", "Xbox", "PS4", "Switch"],
+    ano: 2020,
+    nota: 7.3,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/5/55/Minecraft_Dungeons_cover.jpg",
+    link: "https://www.minecraft.net/en-us/about-dungeons"
+  },
+  {
+    criadores: ["Remedy Entertainment"],
+    jogo: "Control",
+    descricao: "Jogo de ação com elementos sobrenaturais e narrativa misteriosa, lançado em 2019.",
+    genero: ["Ação", "Aventura"],
+    plataformas: ["PC", "PS4", "Xbox One"],
+    ano: 2019,
+    nota: 8.4,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/e/e4/Control_box_art.jpg",
+    link: "https://controlgame.com/"
+  },
+  {
+    criadores: ["Toby Fox"],
+    jogo: "Deltarune",
+    descricao: "RPG indie sequência espiritual de Undertale, lançado em capítulos desde 2018.",
+    genero: ["RPG"],
+    plataformas: ["PC", "Mac", "Switch", "PS4"],
+    ano: 2018,
+    nota: 8.9,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/d/d9/Deltarune_cover.jpg",
+    link: "https://www.deltarune.com/"
+  },
+  {
+    criadores: ["Klei Entertainment"],
+    jogo: "Don't Starve",
+    descricao: "Jogo de sobrevivência com visual único e elementos de crafting, lançado em 2013.",
+    genero: ["Sobrevivência", "Aventura"],
+    plataformas: ["PC", "PS4", "Xbox One", "Switch"],
+    ano: 2013,
+    nota: 8.2,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/c/c5/Don%27t_Starve_Box_Art.jpg",
+    link: "https://www.klei.com/games/dont-starve"
+  },
+  {
+    criadores: ["Sucker Punch Productions"],
+    jogo: "Ghost of Tsushima",
+    descricao: "Aventura de ação no Japão feudal com foco em combate e narrativa, lançado em 2020.",
+    genero: ["Ação", "Aventura"],
+    plataformas: ["PS4", "PS5"],
+    ano: 2020,
+    nota: 9.1,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/a/a6/Ghost_of_Tsushima.jpg",
+    link: "https://www.suckerpunch.com/games/ghost-of-tsushima"
+  },
+  {
+    criadores: ["Tetsuya Nomura"],
+    jogo: "Kingdom Hearts",
+    descricao: "RPG que mistura personagens Disney com Final Fantasy, lançado em 2002.",
+    genero: ["RPG", "Ação"],
+    plataformas: ["PS2", "PS3", "PS4", "Switch"],
+    ano: 2002,
+    nota: 8.5,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/0/04/Kingdom_Hearts_box_artwork.png",
+    link: "https://kingdomhearts.com/"
+  },
+  {
+    criadores: ["Cliff Bleszinski"],
+    jogo: "Gears 5",
+    descricao: "Continuação da franquia Gears of War com melhorias em jogabilidade e história, lançado em 2019.",
+    genero: ["FPS", "Ação"],
+    plataformas: ["Xbox One", "PC"],
+    ano: 2019,
+    nota: 8.3,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/6/6f/Gears_5_cover_art.jpg",
+    link: "https://gearsofwar.com/"
+  },
+  {
+    criadores: ["Yu Suzuki"],
+    jogo: "Virtua Fighter",
+    descricao: "Pioneiro em jogos de luta 3D, lançado em 1993.",
+    genero: ["Luta"],
+    plataformas: ["Arcade", "Saturn", "PS"],
+    ano: 1993,
+    nota: 8.1,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/e/e8/Virtua_Fighter_arcade_flyer.png",
+    link: "https://en.wikipedia.org/wiki/Virtua_Fighter"
+  },
+  {
+    criadores: ["David Jaffe"],
+    jogo: "God of War II",
+    descricao: "Sequência do sucesso God of War, lançado em 2007.",
+    genero: ["Ação", "Aventura"],
+    plataformas: ["PS2"],
+    ano: 2007,
+    nota: 9.3,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/c/c0/God_of_War_II_cover_art.jpg",
+    link: "https://godofwar.playstation.com/"
+  },
+  {
+    criadores: ["Cory Barlog"],
+    jogo: "God of War III",
+    descricao: "Conclusão épica da trilogia original, lançado em 2010.",
+    genero: ["Ação", "Aventura"],
+    plataformas: ["PS3", "PS4"],
+    ano: 2010,
+    nota: 9.5,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/6/6b/God_of_War_III_cover_art.jpg",
+    link: "https://godofwar.playstation.com/"
+  },
+  {
+    criadores: ["David Jaffe"],
+    jogo: "Twisted Metal",
+    descricao: "Jogo de combate veicular com caos e diversão, lançado em 1995.",
+    genero: ["Corrida", "Ação"],
+    plataformas: ["PS1"],
+    ano: 1995,
+    nota: 8.0,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/2/25/Twisted_Metal_Coverart.jpg",
+    link: "https://en.wikipedia.org/wiki/Twisted_Metal_(video_game)"
+  },
+  {
+    criadores: ["Shigeru Miyamoto"],
+    jogo: "Super Mario Odyssey",
+    descricao: "Aventura 3D inovadora do Mario, lançada em 2017 para Switch.",
+    genero: ["Plataforma", "Aventura"],
+    plataformas: ["Switch"],
+    ano: 2017,
+    nota: 9.7,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/8/8d/Super_Mario_Odyssey.jpg",
+    link: "https://supermario.nintendo.com/"
+  },
+  {
+    criadores: ["Hideo Kojima"],
+    jogo: "Snatcher",
+    descricao: "Aventura cyberpunk e visual novel, clássico cult lançado em 1988.",
+    genero: ["Aventura", "Cyberpunk"],
+    plataformas: ["MSX2", "Sega CD"],
+    ano: 1988,
+    nota: 8.5,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/2/29/Snatcher_Msx2_cover.jpg",
+    link: "https://en.wikipedia.org/wiki/Snatcher_(video_game)"
+  },
+  {
+    criadores: ["Cliff Bleszinski"],
+    jogo: "LawBreakers",
+    descricao: "FPS multiplayer com alta velocidade, lançado em 2017.",
+    genero: ["FPS", "Multijogador"],
+    plataformas: ["PC", "PS4"],
+    ano: 2017,
+    nota: 6.3,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/0/06/LawBreakers_box_art.jpg",
+    link: "https://www.lawbreakers.com/"
+  },
+  {
+    criadores: ["Markus Persson"],
+    jogo: "Scrolls",
+    descricao: "Jogo de estratégia com cartas colecionáveis, lançado em 2014.",
+    genero: ["Estratégia", "Cartas"],
+    plataformas: ["PC"],
+    ano: 2014,
+    nota: 7.1,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/3/3c/Scrolls_logo.png",
+    link: "https://www.scrolls.com/"
+  },
+  {
+    criadores: ["Yoko Taro"],
+    jogo: "Nier: Automata",
+    descricao: "RPG de ação com história profunda e múltiplos finais, lançado em 2017.",
+    genero: ["RPG", "Ação"],
+    plataformas: ["PC", "PS4", "Xbox One"],
+    ano: 2017,
+    nota: 9.0,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/0/0d/Nier_Automata_cover_art.jpg",
+    link: "https://nier.square-enix-games.com/"
+  },
+  {
+    criadores: ["Yuji Naka"],
+    jogo: "Sonic the Hedgehog",
+    descricao: "Clássico jogo de plataforma com o mascote da Sega, lançado em 1991.",
+    genero: ["Plataforma"],
+    plataformas: ["Sega Genesis", "Várias"],
+    ano: 1991,
+    nota: 8.6,
+    imagem: "https://upload.wikimedia.org/wikipedia/en/8/87/Sonic_the_Hedgehog_2_box_artwork.jpg",
+    link: "https://sonic.sega.com/"
+  },
+
+    // Continue com +100 jogos e criadores reais aqui
+  ];
+
+  const cardLista = document.getElementById("card-lista");
+  const searchInput = document.getElementById("search");
+  const filterGenre = document.getElementById("filter-genre");
+  const filterPlatform = document.getElementById("filter-platform");
+  const filterYear = document.getElementById("filter-year");
+  const toggleThemeBtn = document.getElementById("toggle-theme");
+  const body = document.body;
+
+  // Preenche filtros únicos de gênero, plataforma e ano
+  function preencherFiltros() {
+    const generos = new Set();
+    const plataformas = new Set();
+    const anos = new Set();
+
+    dados.forEach(item => {
+      item.genero.forEach(g => generos.add(g));
+      item.plataformas.forEach(p => plataformas.add(p));
+      anos.add(item.ano);
+    });
+
+    // Limpar selects
+    filterGenre.innerHTML = '<option value="">Todos</option>';
+    filterPlatform.innerHTML = '<option value="">Todas</option>';
+    filterYear.innerHTML = '<option value="">Todos</option>';
+
+    // Adiciona opções em ordem alfabética ou numérica
+    [...generos].sort().forEach(g => {
+      filterGenre.innerHTML += `<option value="${g}">${g}</option>`;
+    });
+    [...plataformas].sort().forEach(p => {
+      filterPlatform.innerHTML += `<option value="${p}">${p}</option>`;
+    });
+    [...anos].sort((a,b) => b - a).forEach(y => {
+      filterYear.innerHTML += `<option value="${y}">${y}</option>`;
+    });
+  }
+
+  // Cria o card
+  function criaCard(item) {
+    const card = document.createElement("article");
+    card.classList.add("card");
+    card.innerHTML = `
+      <img src="${item.imagem}" alt="Capa do jogo ${item.jogo}" loading="lazy" />
+      <div class="card-content">
+        <h2>${item.jogo}</h2>
+        <h3>${item.criadores.join(", ")}</h3>
+        <p>${item.descricao}</p>
+        <div class="tags">${item.genero.map(g => `<span class="tag">${g}</span>`).join('')}</div>
+        <div class="extra-info">
+          <p><strong>Ano:</strong> ${item.ano} | <strong>Plataformas:</strong> ${item.plataformas.join(", ")} | <strong>Nota:</strong> ${item.nota.toFixed(1)}/10</p>
+          <p><a href="${item.link}" target="_blank" rel="noopener noreferrer">Mais informações</a></p>
+        </div>
+      </div>
+    `;
+    return card;
+  }
+
+  // Renderiza a lista com filtros e busca
+  function renderizaLista() {
+    const busca = searchInput.value.trim().toLowerCase();
+    const generoSelecionado = filterGenre.value;
+    const plataformaSelecionada = filterPlatform.value;
+    const anoSelecionado = filterYear.value;
+
+    const filtrados = dados.filter(item => {
+      const matchBusca = item.jogo.toLowerCase().includes(busca) || item.criadores.some(c => c.toLowerCase().includes(busca));
+      const matchGenero = generoSelecionado ? item.genero.includes(generoSelecionado) : true;
+      const matchPlataforma = plataformaSelecionada ? item.plataformas.includes(plataformaSelecionada) : true;
+      const matchAno = anoSelecionado ? item.ano.toString() === anoSelecionado : true;
+      return matchBusca && matchGenero && matchPlataforma && matchAno;
+    });
+
+    cardLista.innerHTML = "";
+
+    if(filtrados.length === 0){
+      cardLista.innerHTML = `<p style="grid-column:1/-1; text-align:center; color: var(--primary); font-weight:600;">Nenhum resultado encontrado.</p>`;
+      return;
+    }
+
+    filtrados.forEach(item => {
+      cardLista.appendChild(criaCard(item));
+    });
+  }
+
+  // Tema claro/escuro com persistência local
+  function aplicaTema(tema) {
+    if(tema === "dark") {
+      body.classList.add("dark");
+      toggleThemeBtn.textContent = "Modo Claro";
+    } else {
+      body.classList.remove("dark");
+      toggleThemeBtn.textContent = "Modo Escuro";
+    }
+    localStorage.setItem("tema", tema);
+  }
+
+  toggleThemeBtn.addEventListener("click", () => {
+    const novoTema = body.classList.contains("dark") ? "light" : "dark";
+    aplicaTema(novoTema);
+  });
+
+  // Inicializa filtros e tema
+  preencherFiltros();
+  aplicaTema(localStorage.getItem("tema") || "light");
+  renderizaLista();
+
+  // Eventos
+  searchInput.addEventListener("input", renderizaLista);
+  filterGenre.addEventListener("change", renderizaLista);
+  filterPlatform.addEventListener("change", renderizaLista);
+  filterYear.addEventListener("change", renderizaLista);
+</script>
+
+</body>
+</html>
